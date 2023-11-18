@@ -1,6 +1,6 @@
 # DATADOCK
 
-DataDock is an application for building customizable monitors, analysis tools, and bots. Built on top of Graph Protocol, you can use granular blockchain data for any task that you need!
+DataDock is an application for creating customizable monitors, analysis tools, and bots. By exposing various modular blockchain analysis tools that are both ready out of the box and deeply specializable, you can use granular blockchain data to automate any task that you need!
 
 Datadock is meant to be run inside of a Docker container. This allows for easy integrations like:
 
@@ -9,8 +9,6 @@ Datadock is meant to be run inside of a Docker container. This allows for easy i
 - Creating uniform dispute logic to bring historical data on chain with an optimistic oracle
 - Automated alerts for your Discord server
 - Running your own private automated arbitrage bot on your laptop
-
-The point of this project is to expose various modular blockchain analysis tools that can be used out of the box, yet allow for expansive customization.
 
 ## Data Sources
 
@@ -55,15 +53,17 @@ All arguments with $ have defaults. Currently they must be input in that order. 
 
 ### Reads
 
-Reads use subgraph data in order to analyze indexed, historical blockchain data. With the Messari standardized subgraphs, you can easily compare metrics like yields, volatility, individual positions, counts, cumulative values, etc between different DeFi protocols. This data is incredibly granular, and you can get data on every single transaction/user in the protocol. See subgraphs.xyz for a list of all available DeFi Subgraphs compatible with DataDock. For even more granular data, you can use the "ERC20-balances" subgraph deployed by DataDock that provides data for every single ERC20 transfer that has occured on Ethereum Mainnet (powered by the ERC20 substream built by Streamingfast https://substreams.dev/streamingfast/erc20-balance-changes/v1.1.0). Since this subgraph was deployed on 18/11, it may not be synced up to chain head by the time that you are reading this.
+Reads use subgraph data in order to analyze indexed, historical blockchain data. With the Messari standardized subgraphs, you can easily compare metrics like yields, volatility, individual positions, counts, cumulative values, etc between different DeFi protocols. This data is incredibly granular, showing every possible statistic on every single transaction/user in the protocol. See subgraphs.xyz for a list of all available DeFi Subgraphs compatible with DataDock. 
+
+For even more specificity, you can use the "ERC20-balances" subgraph deployed by DataDock that provides data points for every single ERC20 transfer that has occured on Ethereum Mainnet (deployed from Streamingfast's spkg). Combining data from every ERC20 transfer with custom scoring logic, you can analyze an address for any metric or trait you want. Since this subgraph was deployed on 18/11, it may not be synced up to chain head by the time that you are reading this.
 
 #### userAnalysis
 
 For the anti-sybil service, DataDock provides a customizable tool called userAnalysis. This service takes in an address and gives a score on how likely this address is a bot or a single user passing funds around. For those looking to implement this tool, the parameters and scoring system allow for customization. The defaults are more of an example of what kinds of logic we can use, what we can check for, and how specific or wide we can be when analyzing a user's history. Here are the current defaults:   
 
-- +2 points for each position opened up with an identical principal amount
-- +1 point for each time a user makes a position and undoes a position within 10000 blocks
-- +4 points each time a user makes a position and undoes a position within 10000 blocks and 1 single withdraw event
+- +2 points for each DeFi position/deposit opened up with an identical principal amount
+- +1 point for each time a user makes a DeFi position/deposit and undoes a position within 10000 blocks
+- +4 points each time a user makes a position/deposit and undoes the position within 10000 blocks and 1 single withdraw event
 - -5 points if user has a liquidation
 - -3 points if a user has transacted on multiple networks
 - -2 points if a user interacts with multiple protocols
@@ -74,6 +74,8 @@ For the anti-sybil service, DataDock provides a customizable tool called userAna
 - +3 points if single address is responsible for more than 80% of transfer count
 - -5 points if 3 or more assets in history
 
+The current determination is that if an address has a score higher than 8, it is either a bot/suspicious. Below that, likely a human.
+
 Want to analyze an address? Execute `docker run cm172596/datadock ./services/userAnalysis.js ADDRESS_HERE` in terminal (replace 'ADDRESS_HERE' with the address you want to analyze). This executes with defaults. For the time being, while the custom scripts are accepted as inputs, for the moment asynchronous logic is not supported. 
 
 #### poolAnalysis
@@ -81,6 +83,3 @@ Want to analyze an address? Execute `docker run cm172596/datadock ./services/use
 ## Important functionality
 
 - resolveAlerts(): This function is in the helpers.js file. This triggers output behaviors from within the Docker like external api calls, socket connections, internal requests, and Ethereum transaction integration
-
-
- 

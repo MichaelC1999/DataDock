@@ -51,6 +51,23 @@ All arguments with $ have defaults. Currently they must be input in that order. 
 
 #### PoolMonitor
 
+This monitor gets a live feed of DeFi events as they are mined. The supported protocols are AAVE, Uniswap, and Compound. Each protocol is scanned for the following events
+
+- DEPOSIT
+- WITHDRAW
+- BORROW
+- REPAY
+- SWAP
+- LIQUIDATES
+
+If any of these events trigger the user set conditions, the user defined alert behavior is triggered. 
+
+This monitor uses the following substreams:
+
+- https://spkg.io/streamingfast/uniswap-v3-v0.2.7.spkg
+- https://spkg.io/streamingfast/aave-v2-lending-pool-v0.1.2.spkg
+- https://spkg.io/streamingfast/compound-v2-v0.1.2.spkg
+
 ### Reads
 
 Reads use subgraph data in order to analyze indexed, historical blockchain data. With the Messari standardized subgraphs, you can easily compare metrics like yields, volatility, individual positions, counts, cumulative values, etc between different DeFi protocols. This data is incredibly granular, showing every possible statistic on every single transaction/user in the protocol. See subgraphs.xyz for a list of all available DeFi Subgraphs compatible with DataDock. 

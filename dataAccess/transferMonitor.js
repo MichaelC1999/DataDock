@@ -23,7 +23,7 @@ const OUTPUT = args[4] || "EXT" // Options are "INT", "EXT", "TRANSACTION", "SOC
 const OUTPUT_URI = (args[5] === "0" || !args[5]) ? "" : args[5] // Internal/External/Socket URI that the output fetches/connects to
 const OUTPUT_OPTIONS = (args[6] === "0" || !args[6]) ? "{}" : args[6] //Stringified request options object
 const CUSTOM_CONDITION_URI = (args[7] === "0" || !args[7]) ? "" : args[7] //Optional URI of a javascript file containing logic to process each transaction indexed. Accesses 'event' in context, must set 'triggered' ar to true for alert triggered 
-const MSG_SCRIPT_URI = args[8] || "TEST" // A URI of a JS file with a script that can process a custom alert message object. Accesses 'msgObj' in context, must set 'message' var as an Object
+const MSG_SCRIPT_URI = args[8] || "" // A URI of a JS file with a script that can process a custom alert message object. Accesses 'msgObj' in context, must set 'message' var as an Object
 
 const argsObj = { TYPE, CONDITION, ADDRESS, VALUE, OUTPUT, OUTPUT_URI, OUTPUT_OPTIONS, CUSTOM_CONDITION_URI, MSG_SCRIPT_URI }
 

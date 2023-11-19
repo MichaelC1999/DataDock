@@ -19,12 +19,12 @@ export const getCurrentBlock = async () => {
         });
         const data = await res.json();
 
-        return 18601435 || data.data["_meta"]?.block?.number;
+        return 18603940 || data.data["_meta"]?.block?.number;
 
     } catch (err) {
         console.log("Error caught - ", err.message);
     }
-    return 18601435;
+    return 18603940;
 }
 
 export const resolveAlerts = async (args, objectToAlert) => {
@@ -99,26 +99,25 @@ export const resolveAlerts = async (args, objectToAlert) => {
         // Passes the current msgObj within the script
         const script = await fetchAndPrintJavaScript(args.OUTPUT_SCRIPT_URI)
         const context = { msgObj }; // Create a context to store the result
-
-        runInNewContext(script, context);
+        if (script.length > 5) {
+            runInNewContext(script, context);
+        }
     }
 }
 
 export const fetchAndPrintJavaScript = async (uri) => {
-    // try {
-    //     const response = await fetch(uri);
+    try {
+        const response = await fetch(uri);
 
-    //     if (!response.ok) {
-    //         throw new Error(`Failed to fetch JavaScript file. Status: ${response.status}`);
-    //     }
+        if (!response.ok) {
+            throw new Error(`Failed to fetch JavaScript file. Status: ${response.status}`);
+        }
 
-    //     const scriptContent = await response.text();
-    //     return scriptContent
-    // } catch (error) {
-    //     console.error('Error:', error.message);
-    // }
-    return `
-    message = {...msgObj, tx: msgObj.transaction}`
+        const scriptContent = await response.text();
+        return scriptContent
+    } catch (error) {
+        return ``
+    }
 }
 
 export const eventMapping = {
